@@ -85,8 +85,24 @@ body{
   margin: -3px 0 -10px;
 }
 
+.info-text span{
+  font-weight: 500;
+}
+
 .wrapper ul{
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.wrapper.active .info-text{
   display: none;
+}
+
+.wrapper.active ul{
+  height: 303px;
+  opacity: 1;
 }
 
 
