@@ -1,7 +1,9 @@
 const wrapper = document.querySelector('.wrapper'),
   searchInput = wrapper.querySelector('input');
 synonyms = wrapper.querySelector('.synonyms .list'),
-  infoText = wrapper.querySelector('.info-text');
+  infoText = wrapper.querySelector('.info-text'),
+  volumeIcon = wrapper.querySelector('.word i')
+let audio;
 
 function data(result, word) {
   if (result.title) {
@@ -17,12 +19,25 @@ function data(result, word) {
     document.querySelector('.word span').innerText = phonetics;
     document.querySelector('.meaning span').innerText = definitions.definition;
     document.querySelector('.example span').innerText = example.example;
+    audio = new Audio('https:' + result[0].phonetics[0].audio);
 
-    for (let i = 0; i < 5; i++) {
-      let tag = `<span>${synonyms.synonyms[i]},</span>`;
-      sysnoyms.insertAdjacentHTML('beforeend', tag);
+
+    if (definitions.synonyms[0] == undefined) {
+      synonyms.parentElement.style.display = 'none';
+    } else {
+      synonyms.parentElement.style.display = 'block';
+      synonyms.innerHTML = "";
+      for (let i = 0; i < 5; i++) {
+        let tag = `<span onclick=search('${definitions.synonyms[i]}')>${definitions.synonyms[i]},</span>`;
+        sysnoyms.insertAdjacentHTML('beforeend', tag);
+      }
     }
   }
+}
+
+function search(word) {
+  searchInput.value = word;
+  fetchApi(word);
 }
 
 function fetchApi(word) {
@@ -37,3 +52,7 @@ searchInput.addEventListener('keyup', e => {
     fetchApi(e.target.value);
   }
 });
+
+volumeIcon.addEventListener('click', () => {
+  audio.play();
+})
